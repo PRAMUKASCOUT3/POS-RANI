@@ -66,7 +66,8 @@
             $('#example').DataTable();
         });
     </script>
-<script src="https://kit.fontawesome.com/be87c3e44a.js" crossorigin="anonymous"></script>    
+<script src="https://kit.fontawesome.com/be87c3e44a.js" crossorigin="anonymous"></script>
+@include('partials.time')    
 
 </body>
 
