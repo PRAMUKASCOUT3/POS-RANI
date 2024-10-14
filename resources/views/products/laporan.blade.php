@@ -1,10 +1,10 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-4">
         <div class="card">
             <div class="card-body">
-                <a href="{{ route('product.print') }}" class="btn badge bg-danger btn-sm mb-3">PDF</a>
+                <a href="{{ route('product.print') }}" class="btn btn-danger mb-3">Download PDF <i class="fas fa-file-pdf"></i></a>
                 <h5 class="card-title">Laporan Produk</h5>
                 <table id="example" class="table table-striped mt-2">
                     <thead>

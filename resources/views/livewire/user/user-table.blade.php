@@ -1,14 +1,14 @@
 <div>
-    <div class="container">
+    <div class="container mt-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Data Pengguna / Kasir <i class="fas fa-users"></i>
                 </h5>
-                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createSupplierModal"><i class="fas fa-plus"></i> Tambah Pengguna</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSupplierModal"><i class="fas fa-plus"></i> Tambah Pengguna</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="example" class="table table-striped mb-0">
+                    <table id="example" class="table table-striped ">
                         <thead>
                             <tr>
                                 <th>No</th>

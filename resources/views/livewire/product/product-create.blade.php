@@ -1,12 +1,12 @@
 <div>
     <div class="container">
         <div class="card">
+            <h5 class="card-header bg-primary text-white">Form Tambah Produk</h5>
             <div class="card-body">
-                <h5 class="card-header bg-primary text-white">Form Tambah Produk</h5>
                 <form wire:submit="save">
                     <input type="text" wire:mode="code" hidden>
                     <div class="mt-3">
-                        <label for="category_id">Kategori Produk <i class="fas fa-clipboard-list"></i></label>
+                        <label class="mb-2" for="category_id">Kategori Produk <i class="fas fa-clipboard-list"></i></label>
                         <select wire:model="category_id" id="category_id" class="form-control">
                             <option value="">==Pilih Kategori Produk==</option>
                             @foreach ($category as $item)
@@ -18,42 +18,42 @@
                         @enderror
                     </div>
                     <div class="mt-3">
-                        <label for="name">Nama Produk <i class="fas fa-file-signature"></i></label>
+                        <label class="mb-2" for="name">Nama Produk <i class="fas fa-file-signature"></i></label>
                         <input type="text" class="form-control" wire:model="name">
                         @error('name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mt-3">
-                        <label for="brand">Merk Produk <i class="fas fa-tag"></i></label>
+                        <label class="mb-2" for="brand">Merk Produk <i class="fas fa-tag"></i></label>
                         <input type="text" class="form-control" wire:model="brand">
                         @error('brand')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mt-3">
-                        <label for="stock">Stok <i class="fas fa-cubes"></i></label>
+                        <label class="mb-2" for="stock">Stok <i class="fas fa-cubes"></i></label>
                         <input type="number" class="form-control" wire:model="stock">
                         @error('stock')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mt-3">
-                        <label for="price_buy">Harga Beli <i class="fas fa-money-check-alt"></i></label>
+                        <label class="mb-2" for="price_buy">Harga Beli <i class="fas fa-money-check-alt"></i></label>
                         <input type="number" class="form-control" wire:model="price_buy">
                         @error('price_buy')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mt-3">
-                        <label for="price_sell">Harga Jual <i class="fas fa-hand-holding-usd"></i></label>
+                        <label class="mb-2" for="price_sell">Harga Jual <i class="fas fa-hand-holding-usd"></i></label>
                         <input type="number" class="form-control" wire:model="price_sell">
                         @error('price_sell')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mt-3">
-                        <label for="unit">Pilih Satuan Barang <i class="fab fa-unity"></i></label>
+                        <label class="mb-2" for="unit">Pilih Satuan Barang <i class="fab fa-unity"></i></label>
                         <select class="form-control" id="unit" wire:model="unit">
                             <option value="">==Pilih Satuan Barang==</option>
                             <option value="Pcs (Pieces)">Pcs (Pieces)</option>
@@ -71,7 +71,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
                 </form>
             </div>
         </div>

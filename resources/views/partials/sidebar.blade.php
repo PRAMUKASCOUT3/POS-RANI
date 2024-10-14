@@ -147,75 +147,91 @@
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item">
-            <a href="index.html" class="menu-link">
+            <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
         </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Account Settings">Master Data</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="pages-account-settings-account.html" class="menu-link">
-                        <div data-i18n="Account">Account</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-account-settings-notifications.html" class="menu-link">
-                        <div data-i18n="Notifications">Notifications</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-account-settings-connections.html" class="menu-link">
-                        <div data-i18n="Connections">Connections</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                <div data-i18n="Misc">Laporan</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="pages-misc-error.html" class="menu-link">
-                        <div data-i18n="Error">Error</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-misc-under-maintenance.html" class="menu-link">
-                        <div data-i18n="Under Maintenance">Under Maintenance</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <!-- User interface -->
-        <li class="menu-item">
-            <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-box"></i>
-                <div data-i18n="User interface">Transaksi</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="ui-accordion.html" class="menu-link">
-                        <div data-i18n="Accordion">Accordion</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="ui-alerts.html" class="menu-link">
-                        <div data-i18n="Alerts">Alerts</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="ui-badges.html" class="menu-link">
-                        <div data-i18n="Badges">Badges</div>
-                    </a>
-                </li>
+        @if (Auth()->user()->isAdmin == 1)
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                    <div data-i18n="Account Settings">Master Data</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ route('pengguna.index') }}" class="menu-link">
+                            <div data-i18n="Account">Data Pengguna</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('supplier.index') }}" class="menu-link">
+                            <div data-i18n="Notifications">Data Supplier</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('category.index') }}" class="menu-link">
+                            <div data-i18n="Connections">Data Kategori</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('product.index') }}" class="menu-link">
+                            <div data-i18n="Connections">Data Produk</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                    <div data-i18n="Misc">Laporan</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ route('pengguna.laporan') }}" class="menu-link">
+                            <div data-i18n="Error">Pengguna</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('product.report') }}" class="menu-link">
+                            <div data-i18n="Error">Produk</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('cashier.report') }}" class="menu-link">
+                            <div data-i18n="Under Maintenance">Transaksi</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @else
+            <!-- User interface -->
+            <li class="menu-item">
+                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-box"></i>
+                    <div data-i18n="User interface">Transaksi</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ route('expenditures.index') }}" class="menu-link">
+                            <div data-i18n="Accordion">Pengeluaran</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('cashier.index') }}" class="menu-link">
+                            <div data-i18n="Alerts">Kasir</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('cashier.riwayat') }}" class="menu-link">
+                            <div data-i18n="Badges">Riwayat Transaksi</div>
+                        </a>
+                    </li>
 
-            </ul>
+                </ul>
+            </li>
+        @endif
+
+
 </aside>
 <!-- / Menu -->

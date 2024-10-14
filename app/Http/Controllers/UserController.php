@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cashier;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use PDF;
@@ -41,9 +42,10 @@ class UserController extends Controller
                 $completedPercentages[] = 0;  // If there are no transactions, store 0
             }
         }
+        $product = Product::count();
     
         // Pass the percentages and total transaction codes to the view
-        return view('dashboard', compact('completedPercentages', 'totalTransactionCodes'));
+        return view('dashboard', compact('completedPercentages', 'totalTransactionCodes','product'));
     }
 
     public function report()

@@ -1,5 +1,5 @@
 <div>
-    <div class="container">
+    <div class="container mt-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Data Pengeluaran <i class="fas fa-file-invoice-dollar"></i></h5>

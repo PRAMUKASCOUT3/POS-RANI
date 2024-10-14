@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-4">
         <div class="card">
             <div class="card-body">
                 <!-- Date filter form -->

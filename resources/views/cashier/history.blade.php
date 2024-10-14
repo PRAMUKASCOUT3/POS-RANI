@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-<div class="container">
+<div class="container mt-4">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title mb-4">Data Riwayat Transaksi <i class="fas fa-history"></i></h5>
