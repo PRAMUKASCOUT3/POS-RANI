@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
     .overlay {
                 position: fixed;
                 top: 0;
@@ -22,4 +22,4 @@
                 Silahkan Hubungi <a href="https://wa.me/+6285357038846">Costumer Service</a></p>
                 </p>
             </div>
-    @endif
+    @endif --}}
