@@ -31,5 +31,10 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
         \App\Models\User::factory()->count(20)->create(); 
+        $this->call([
+            SupplierSeeder::class,
+            CategorySeeder::class,
+            ProductSeeder::class
+        ]);
     }
 }

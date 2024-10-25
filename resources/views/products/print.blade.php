@@ -12,17 +12,11 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            /* padding: 20px; */
         }
 
         .container {
             margin-top: 10px;
         }
-
-        /* .card {
-            border: 1px solid #dee2e6;
-            border-radius: 0.5rem;
-        } */
 
         .card-header {
             background-color: white;
@@ -41,20 +35,22 @@
         .table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 10px;
         }
 
         .table th,
         .table td {
-            padding: 0.5rem;
+            padding: 0.75rem;
             vertical-align: middle;
             border: 1px solid #dee2e6;
             word-wrap: break-word;
+            text-align: center; /* Ensure all text is centered */
         }
 
         .table th {
             background-color: #f8f9fa;
             color: black;
-            text-align: center;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
@@ -65,42 +61,70 @@
             text-align: center;
         }
 
-        /* Mengatur lebar kolom secara proporsional */
-        th:nth-child(1), td:nth-child(1) {
-            width: 5%;
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 9%;
         }
 
-        th:nth-child(2), td:nth-child(2) {
-            width: 10%;
-        }
-
-        th:nth-child(3), td:nth-child(3) {
-            width: 15%;
-        }
-
-        th:nth-child(4), td:nth-child(4) {
+        th:nth-child(2),
+        td:nth-child(2) {
             width: 20%;
         }
 
-        th:nth-child(5), td:nth-child(5) {
-            width: 15%;
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 20%;
         }
 
-        th:nth-child(6), td:nth-child(6) {
-            width: 10%;
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 20%;
         }
 
-        th:nth-child(7), td:nth-child(7) {
-            width: 10%;
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 20%;
         }
 
-        th:nth-child(8), td:nth-child(8) {
-            width: 10%;
+        th:nth-child(6),
+        td:nth-child(6) {
+            width: 20%;
+        }
+
+        th:nth-child(7),
+        td:nth-child(7) {
+            width: 20%;
+        }
+
+        th:nth-child(8),
+        td:nth-child(8) {
+            width: 8%;
         }
 
         .signature {
             margin-top: 2rem;
             text-align: right;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+
+            body {
+                margin: 0;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .table {
+                width: 100%;
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -135,27 +159,20 @@
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->brand }}</td>
                                 @if ($item->stock == 0)
-                                    <span class="badge bg-danger text-white">Stock Habis</span>
+                                    <td><span class="badge bg-danger text-white">Stock Habis</span></td>
                                 @else
                                     @php
-                                        // Calculate total items sold for this product
-                                        $total_sold = $item->cashiers->sum('total_item'); // Using the 'cashiers' relationship
-                                        // Calculate the original stock
+                                        $total_sold = $item->cashiers->sum('total_item');
                                         $original_stock = $item->stock + $total_sold;
-
-                                        $origin_price_buy = $original_stock * $item->price_buy 
                                     @endphp
                                     <td>{{ $original_stock }}</td>
                                 @endif
                                 @php
-                                // Calculate total items sold for this product
-                                $total_sold = $item->cashiers->sum('total_item'); // Using the 'cashiers' relationship
-                                // Calculate the original stock
-                                $original_stock = $item->stock + $total_sold;
-
-                                $origin_price_buy = $original_stock * $item->price_buy; 
-                                $origin_price_sell = $original_stock * $item->price_sell; 
-                            @endphp
+                                    $total_sold = $item->cashiers->sum('total_item');
+                                    $original_stock = $item->stock + $total_sold;
+                                    $origin_price_buy = $original_stock * $item->price_buy;
+                                    $origin_price_sell = $original_stock * $item->price_sell;
+                                @endphp
                                 <td>Rp.{{ number_format($origin_price_buy) }}</td>
                                 <td>Rp.{{ number_format($origin_price_sell) }}</td>
                                 <td>{{ $item->unit }}</td>
@@ -167,9 +184,8 @@
                         $total_sell = 0;
 
                         foreach ($products as $product) {
-                            $total_sold = $product->cashiers->sum('total_item'); // Using the 'cashiers' relationship
-                                // Calculate the original stock
-                                $original_stock = $product->stock + $total_sold;
+                            $total_sold = $product->cashiers->sum('total_item');
+                            $original_stock = $product->stock + $total_sold;
                             $total_buy += $original_stock * $product->price_buy;
                             $total_sell += $original_stock * $product->price_sell;
                         }
@@ -178,7 +194,7 @@
                         <td colspan="6"><b>Total</b></td>
                         <td><b>Rp.{{ number_format($total_buy) }}</b></td>
                         <td><b>Rp.{{ number_format($total_sell) }}</b></td>
-                        <td></td> <!-- Make sure to leave a cell empty if not used -->
+                        <td></td>
                     </tr>
                 </table>
 
