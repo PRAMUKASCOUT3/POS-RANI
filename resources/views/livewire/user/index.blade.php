@@ -5,7 +5,9 @@
 @endpush
 
 @section('content')
+
 @livewire('user.user-table')
+
 @endsection
 
 @push('scripts')

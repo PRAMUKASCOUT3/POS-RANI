@@ -47,11 +47,6 @@
                                     @endif
                                     
                                     </ul>
-
-                                    <!-- Pagination Links -->
-                                    <div class="mt-3">
-                                        {{ $product->links() }}
-                                    </div>
                                 @else
                                     <p class="mt-2">Tidak ada produk ditemukan.</p>
                                 @endif

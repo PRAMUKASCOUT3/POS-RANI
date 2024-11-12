@@ -40,12 +40,11 @@
                             <div
                                 class="card-title d-flex align-items-start justify-content-between">
                                 <div class="avatar flex-shrink-0">
-                                    <img src="/assets/img/icons/unicons/chart-success.png"
-                                        alt="chart success" class="rounded" />
+                                    <h4><li class="fas fa-boxes fa-lg" style="color: rgb(3, 255, 3)"></li></h4>
                                 </div>
                             </div>
                             <span class="fw-semibold d-block mb-1">Produk</span>
-                            <h3 class="card-title mb-2">Jumlah : {{ $product }}</h3>
+                            <h4 class="card-title mb-2">Jumlah : {{ $product }}</h4>
                         </div>
                     </div>
                 </div>
@@ -55,15 +54,14 @@
                             <div
                                 class="card-title d-flex align-items-start justify-content-between">
                                 <div class="avatar flex-shrink-0">
-                                    <img src="/assets/img/icons/unicons/wallet-info.png"
-                                        alt="Credit Card" class="rounded" />
+                                    <h4><li class="fas fa-users fa-lg" style="color: blue"></li></h4>
                                 </div>
                             </div>
                             <span>Pengguna</span>
                             @php
                                 $user = \App\Models\User::where('isAdmin',0)->count();
                             @endphp
-                            <h3 class="card-title text-nowrap mb-1">Jumlah : {{ $user }}</h3>
+                            <h4 class="card-title text-nowrap mb-1">Jumlah : {{ $user }}</h4>
                         </div>
                     </div>
                 </div>
