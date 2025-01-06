@@ -164,11 +164,11 @@
                             <div data-i18n="Account">Data Pengguna</div>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    {{-- <li class="menu-item">
                         <a href="{{ route('supplier.index') }}" class="menu-link">
                             <div data-i18n="Notifications">Data Supplier</div>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="menu-item">
                         <a href="{{ route('category.index') }}" class="menu-link">
                             <div data-i18n="Connections">Data Kategori</div>

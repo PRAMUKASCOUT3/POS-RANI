@@ -39,4 +39,11 @@ class ProductController extends Controller
         $pdf = PDF::loadView('products.print', $data);
         return $pdf->download('Laporan_Produk.pdf');
     }
+
+    public function delete($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+        return redirect()->route('product.index')->with('success','Produk berhasil dihapus');
+    }
 }

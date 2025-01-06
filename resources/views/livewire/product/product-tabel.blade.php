@@ -41,7 +41,13 @@
                                     <td>
                                         <div class="d-flex align-items-between">
                                             <a href="{{ route('product.edit', $item->id) }}" class="btn btn-info btn-sm" style="margin-right:8px">Edit</a>
-                                            <button class="btn btn-danger btn-sm" wire:click="delete({{ $item->id }})" onclick="confirm('Apakah kamu yakin ingin menghapus data ini?') || event.stopImmediatePropagation();">Hapus</button>
+                                            <form id="deleteForm{{ $item->id }}" class="d-inline"
+                                                action="{{ route('product.delete', $item->id) }}" method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                    onclick="confirmDelete({{ $item->id }})">Hapus</button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>

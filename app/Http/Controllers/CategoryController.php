@@ -12,4 +12,11 @@ class CategoryController extends Controller
         $category = Category::find($id);
         return view('categorys.edit', compact('category'));
     }
+
+    public function delete($id)
+    {
+        $category = Category::find($id);
+        $category->delete();
+        return redirect()->route('category.index')->with('success', 'Berhasil Hapus Data');
+    }
 }

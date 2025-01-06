@@ -26,12 +26,18 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        <a href="{{ route('pengguna.edit',$user->id) }}"
-                                            class="btn btn-info btn-sm ">Edit</a>
-                                        <button class="btn btn-danger btn-sm" wire:click="delete({{ $user->id }})"
-                                            onclick="confirm('Apakah kamu yakin ingin menghapus data ini?') || event.stopImmediatePropagation();">
-                                            Hapus
-                                        </button>
+                                        <div class="d-flex justify-content-center">
+
+                                            <a href="{{ route('pengguna.edit',$user->id) }}"
+                                                class="btn btn-info btn-sm me-2">Edit</a>
+                                                <form id="deleteForm{{ $user->id }}" class="d-inline"
+                                                    action="{{ route('pengguna.delete', $user->id) }}" method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                        onclick="confirmDelete({{ $user->id }})">Hapus</button>
+                                                </form>
+                                            </div>
                                     </td>
                                 </tr>
                             @endforeach

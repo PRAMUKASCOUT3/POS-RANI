@@ -119,39 +119,27 @@
 </div>
 @endif
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
 <script>
-    var options = {
-        chart: {
-            type: 'bar',
-        },
-        series: [{
-            name: 'Jumlah Transaksi',
-            data: [{{ implode(',', $completedPercentages) }}]
-        }],
-        xaxis: {
-            categories: [
-                '{{ now()->subMonths(11)->format("M") }}', 
-                '{{ now()->subMonths(10)->format("M") }}', 
-                '{{ now()->subMonths(9)->format("M") }}', 
-                '{{ now()->subMonths(8)->format("M") }}', 
-                '{{ now()->subMonths(7)->format("M") }}', 
-                '{{ now()->subMonths(6)->format("M") }}', 
-                '{{ now()->subMonths(5)->format("M") }}', 
-                '{{ now()->subMonths(4)->format("M") }}', 
-                '{{ now()->subMonths(3)->format("M") }}', 
-                '{{ now()->subMonths(2)->format("M") }}', 
-                '{{ now()->subMonths(1)->format("M") }}', 
-                '{{ now()->format("M") }}'
-            ]
-        },
-        title: {
-            text: 'Persentase Penyelesaian Transaksi (12 Bulan Terakhir)',
-            align: 'left'
-        }
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var options = {
+            chart: {
+                type: 'bar',
+            },
+            series: [{
+                name: 'Jumlah Transaksi',
+                data: {!! json_encode($completedPercentages) !!}
+            }],
+            xaxis: {
+                categories: {!! json_encode($months) !!}
+            },
+            title: {
+                text: 'Persentase Penyelesaian Transaksi (12 Bulan Terakhir)',
+                align: 'left'
+            }
+        };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    });
 </script>
 @endsection

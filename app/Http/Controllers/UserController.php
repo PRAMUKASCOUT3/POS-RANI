@@ -20,6 +20,7 @@ class UserController extends Controller
     {
         $completedPercentages = [];
         $totalTransactionCodes = [];
+        $months = [];
     
         // Loop through the last 12 months
         for ($i = 11; $i >= 0; $i--) {
@@ -41,11 +42,12 @@ class UserController extends Controller
             } else {
                 $completedPercentages[] = 0;  // If there are no transactions, store 0
             }
-        }
+            $months[] = $startOfMonth->format('M');
+        }   
         $product = Product::count();
     
         // Pass the percentages and total transaction codes to the view
-        return view('dashboard', compact('completedPercentages', 'totalTransactionCodes','product'));
+        return view('dashboard', compact('completedPercentages', 'totalTransactionCodes','product','months'));
     }
 
     public function report()
@@ -62,6 +64,13 @@ class UserController extends Controller
         ];
         $pdf = PDF::loadView('user.print', $data);
         return $pdf->download('Laporan_Pengguna_Kasir.pdf');
+    }
+
+    public function delete($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->route('pengguna.index')->with('success', 'User berhasil dihapus');
     }
     
 }
