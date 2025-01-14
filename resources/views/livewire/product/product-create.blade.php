@@ -1,7 +1,7 @@
 <div>
     <div class="container mt-4">
         <div class="card">
-            <h5 class="card-header bg-primary text-white">Form Tambah Produk</h5>
+            <h5 class="card-header bg-primary text-white">Data Baru</h5>
             <div class="card-body">
                 <form wire:submit="save">
                     <input type="text" wire:mode="code" hidden>
@@ -71,7 +71,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                    <button type="submit" class="btn btn-primary mt-3">Simpan</button>
                 </form>
             </div>
         </div>

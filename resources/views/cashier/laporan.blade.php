@@ -12,7 +12,7 @@
                         <input type="hidden" name="end_date" value="{{ request('end_date') }}">
                         <button type="submit" class="btn btn-danger">Download PDF <i class="fas fa-file-pdf"></i></button>
                     </form>
-                
+
                     <!-- Filter Form -->
                     <form method="GET" action="{{ route('cashier.report') }}" class="d-flex align-items-center">
                         <div class="d-flex align-items mb-4" style="gap: 10px;">
@@ -28,16 +28,18 @@
                             </div>
                         </div>
                         <div class="d-flex align-items" style="gap: 10px; margin-left: 10px;">
-                            <button type="submit" class="btn btn-primary">Filter <i class="fas fa-filter fa-xs"></i></button>
-                            <a href="{{ route('cashier.report') }}" class="btn btn-danger">Reset <i class="fas fa-sync-alt fa-xs"></i></a>
+                            <button type="submit" class="btn btn-primary">Filter <i
+                                    class="fas fa-filter fa-xs"></i></button>
+                            <a href="{{ route('cashier.report') }}" class="btn btn-danger">Reset <i
+                                    class="fas fa-sync-alt fa-xs"></i></a>
                         </div>
                     </form>
                 </div>
-                
+
                 <!-- Transaction report table -->
                 <h5 class="card-title">Laporan Transaksi</h5>
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table id="example" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Nama Kasir <i class="fas fa-user"></i></th>
@@ -108,36 +110,6 @@
 
                         </tr>
                     </table>
-                </div>
-
-
-                <!-- Pagination -->
-                <div class="flex items-center justify-between p-4 border-t border-blue-gray-50">
-                    <p class="block text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                        Page {{ $cashier->currentPage() }} of {{ $cashier->lastPage() }}
-                    </p>
-                    <div class="flex gap-2">
-                        @if ($cashier->onFirstPage())
-                            <button
-                                class="select-none rounded-lg border py-2 px-4 text-xs font-bold text-gray-900 opacity-50 cursor-not-allowed"
-                                disabled>Previous</button>
-                        @else
-                            <a href="{{ $cashier->previousPageUrl() }}">
-                                <button
-                                    class="select-none rounded-lg border py-2 px-4 text-xs font-bold text-gray-900">Previous</button>
-                            </a>
-                        @endif
-                        @if ($cashier->hasMorePages())
-                            <a href="{{ $cashier->nextPageUrl() }}">
-                                <button
-                                    class="select-none rounded-lg border py-2 px-4 text-xs font-bold text-gray-900">Next</button>
-                            </a>
-                        @else
-                            <button
-                                class="select-none rounded-lg border py-2 px-4 text-xs font-bold text-gray-900 opacity-50 cursor-not-allowed"
-                                disabled>Next</button>
-                        @endif
-                    </div>
                 </div>
             </div>
 

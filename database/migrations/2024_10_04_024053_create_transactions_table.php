@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cashiers', function (Blueprint $table) {
+        Schema::create('Transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->string('code',15);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete()->nullable(); //
             $table->foreignId('product_id')->constrained()->cascadeOnDelete(); //
-            $table->string('date');
-            $table->string('total_item');
+            $table->string('date',20);
+            $table->string('total_item',15);
             $table->decimal('subtotal', 10, 2);
-            $table->decimal('amount_paid', 10, 2); 
-            $table->enum('status', ['completed', 'pending', 'canceled'])->default('pending'); // Status transaksi
+            $table->decimal('amount_paid', 10, 2);
+            $table->string('bank',50)->nullable(); 
+            $table->string('number_card',30)->nullable(); 
+            $table->string('status',10);
             $table->timestamps();
         });
     }

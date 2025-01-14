@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cashier;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use PDF;
@@ -29,7 +29,7 @@ class UserController extends Controller
             $endOfMonth = now()->subMonths($i)->endOfMonth();
     
             // Get total transactions (based on distinct codes) for the month
-            $totalTransactions = Cashier::whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            $totalTransactions = Transaction::whereBetween('created_at', [$startOfMonth, $endOfMonth])
                 ->distinct('code')
                 ->count('code');
     

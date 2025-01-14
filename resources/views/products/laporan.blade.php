@@ -33,7 +33,7 @@
                                 @else
                                     @php
                                         // Calculate total items sold for this product
-                                        $total_sold = $item->cashiers->sum('total_item'); // Using the 'cashiers' relationship
+                                        $total_sold = $item->transactions->sum('total_item'); // Using the 'transactions' relationship
                                         // Calculate the original stock
                                         $original_stock = $item->stock + $total_sold;
 
@@ -43,7 +43,7 @@
                                 @endif
                                 @php
                                     // Calculate total items sold for this product
-                                    $total_sold = $item->cashiers->sum('total_item'); // Using the 'cashiers' relationship
+                                    $total_sold = $item->transactions->sum('total_item'); // Using the 'transactions' relationship
                                     // Calculate the original stock
                                     $original_stock = $item->stock + $total_sold;
 
@@ -61,7 +61,7 @@
                         $total_sell = 0;
 
                         foreach ($products as $product) {
-                            $total_sold = $product->cashiers->sum('total_item'); // Using the 'cashiers' relationship
+                            $total_sold = $product->transactions->sum('total_item'); // Using the 'transactions' relationship
                             // Calculate the original stock
                             $original_stock = $product->stock + $total_sold;
                             $total_buy += $original_stock * $product->price_buy;

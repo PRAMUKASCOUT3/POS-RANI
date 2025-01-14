@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Cashier extends Model
+class Transaction extends Model
 {
     use HasFactory;
 
-    protected $table = 'cashiers';
+    protected $table = 'transactions';
     protected $fillable = [
         'code',
         'user_id',
@@ -20,6 +20,8 @@ class Cashier extends Model
         'total_item',
         'subtotal',
         'amount_paid',
+        'bank',
+        'number_card',
         'status'
     ];
 

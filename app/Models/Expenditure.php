@@ -21,9 +21,9 @@ class Expenditure extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function cashiers(): HasMany
+    public function transactions(): HasMany
     {
-        return $this->hasMany(Cashier::class);
+        return $this->hasMany(Transaction::class);
     }
 
     

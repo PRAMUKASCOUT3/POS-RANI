@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cashier;
+use App\Models\Transaction;
 use App\Models\Expenditure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +19,7 @@ class CashierController extends Controller
     public function history()
     {
         // Mengambil data transaksi dengan paginasi
-        $cashier = Cashier::where('user_id', Auth::id())
+        $cashier = Transaction::where('user_id', Auth::id())
             ->with('product') // Include relasi dengan produk
             ->orderBy('created_at', 'desc')
             ->paginate(10); // Menggunakan paginate
@@ -34,7 +34,7 @@ class CashierController extends Controller
         $end_date = $request->input('end_date');
 
         // Filter data kasir berdasarkan tanggal
-        $cashier = Cashier::when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
+        $cashier = Transaction::when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
             $query->whereBetween('date', [$start_date, $end_date]);
         })->paginate(10);
 
@@ -61,7 +61,7 @@ class CashierController extends Controller
         $end_date = $request->input('end_date');
 
         // Query untuk transaksi dengan filter tanggal
-        $cashier = Cashier::with('product')
+        $cashier = Transaction::with('product')
             ->when($start_date && $end_date, function ($query) use ($start_date, $end_date) {
                 $query->whereBetween('date', [$start_date, $end_date]);
             })

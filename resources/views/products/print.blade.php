@@ -8,125 +8,69 @@
     <title>{{ $title }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-        }
-
-        .container {
-            margin-top: 10px;
-        }
-
-        .card-header {
-            background-color: white;
-            color: black;
-            padding: 1.5rem;
-            border-bottom: 1px solid #dee2e6;
-            text-align: center;
-        }
-
-        .card-header h2 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            font-size: 10px;
-        }
-
-        .table th,
-        .table td {
-            padding: 0.75rem;
-            vertical-align: middle;
-            border: 1px solid #dee2e6;
-            word-wrap: break-word;
-            text-align: center; /* Ensure all text is centered */
-        }
-
-        .table th {
-            background-color: #f8f9fa;
-            color: black;
-        }
-
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(0, 123, 255, 0.1);
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        th:nth-child(1),
-        td:nth-child(1) {
-            width: 9%;
-        }
-
-        th:nth-child(2),
-        td:nth-child(2) {
-            width: 20%;
-        }
-
-        th:nth-child(3),
-        td:nth-child(3) {
-            width: 20%;
-        }
-
-        th:nth-child(4),
-        td:nth-child(4) {
-            width: 20%;
-        }
-
-        th:nth-child(5),
-        td:nth-child(5) {
-            width: 20%;
-        }
-
-        th:nth-child(6),
-        td:nth-child(6) {
-            width: 20%;
-        }
-
-        th:nth-child(7),
-        td:nth-child(7) {
-            width: 20%;
-        }
-
-        th:nth-child(8),
-        td:nth-child(8) {
-            width: 8%;
-        }
-
-        .signature {
-            margin-top: 2rem;
-            text-align: right;
-        }
-
-        @media print {
-            @page {
-                size: A4;
-                margin: 10mm;
-            }
-
+        <style>
             body {
-                margin: 0;
-                -webkit-print-color-adjust: exact;
+                font-family: Arial, sans-serif;
+                font-size: 12px;
             }
-
+    
             .container {
-                width: 100%;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 5px;
+                border: 1px solid #ddd;
             }
-
+    
+            .card-header {
+                background-color: #007bff;
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                text-align: center;
+                font-size: 18px;
+            }
+    
             .table {
                 width: 100%;
-                max-width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
             }
-        }
-    </style>
+    
+            .table th,
+            .table td {
+                border: 1px solid #dee2e6;
+                padding: 8px;
+                text-align: center;
+                vertical-align: middle;
+            }
+    
+            .table th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+            }
+    
+            .tfoot td {
+                font-weight: bold;
+                background-color: #f1f1f1;
+            }
+    
+            .signature {
+                margin-top: 30px;
+                text-align: right;
+            }
+    
+            .signature span {
+                display: inline-block;
+            }
+    
+            .signature u {
+                margin-top: 30px;
+                display: block;
+                font-weight: bold;
+            }
+        </style>
+        
 </head>
 
 <body>
@@ -159,20 +103,27 @@
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->brand }}</td>
                                 @if ($item->stock == 0)
-                                    <td><span class="badge bg-danger text-white">Stock Habis</span></td>
+                                    <span class="badge bg-danger text-white">Stock Habis</span>
                                 @else
                                     @php
-                                        $total_sold = $item->cashiers->sum('total_item');
+                                        // Calculate total items sold for this product
+                                        $total_sold = $item->transactions->sum('total_item'); // Using the 'transactions' relationship
+                                        // Calculate the original stock
                                         $original_stock = $item->stock + $total_sold;
+
+                                        $origin_price_buy = $original_stock * $item->price_buy 
                                     @endphp
                                     <td>{{ $original_stock }}</td>
                                 @endif
                                 @php
-                                    $total_sold = $item->cashiers->sum('total_item');
-                                    $original_stock = $item->stock + $total_sold;
-                                    $origin_price_buy = $original_stock * $item->price_buy;
-                                    $origin_price_sell = $original_stock * $item->price_sell;
-                                @endphp
+                                // Calculate total items sold for this product
+                                $total_sold = $item->transactions->sum('total_item'); // Using the 'transactions' relationship
+                                // Calculate the original stock
+                                $original_stock = $item->stock + $total_sold;
+
+                                $origin_price_buy = $original_stock * $item->price_buy; 
+                                $origin_price_sell = $original_stock * $item->price_sell; 
+                            @endphp
                                 <td>Rp.{{ number_format($origin_price_buy) }}</td>
                                 <td>Rp.{{ number_format($origin_price_sell) }}</td>
                                 <td>{{ $item->unit }}</td>
@@ -184,8 +135,9 @@
                         $total_sell = 0;
 
                         foreach ($products as $product) {
-                            $total_sold = $product->cashiers->sum('total_item');
-                            $original_stock = $product->stock + $total_sold;
+                            $total_sold = $product->transactions->sum('total_item'); // Using the 'transactions' relationship
+                                // Calculate the original stock
+                                $original_stock = $product->stock + $total_sold;
                             $total_buy += $original_stock * $product->price_buy;
                             $total_sell += $original_stock * $product->price_sell;
                         }
@@ -194,7 +146,7 @@
                         <td colspan="6"><b>Total</b></td>
                         <td><b>Rp.{{ number_format($total_buy) }}</b></td>
                         <td><b>Rp.{{ number_format($total_sell) }}</b></td>
-                        <td></td>
+                        <td></td> <!-- Make sure to leave a cell empty if not used -->
                     </tr>
                 </table>
 

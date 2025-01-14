@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Cashier;
 
-use App\Models\Cashier;
+use App\Models\Transaction;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,6 +18,10 @@ class CashierTable extends Component
     public $date;
     public $status = 'pending';
     public $change = 0;
+
+    public $bank = [];
+
+    public $number_card = 0;
 
     public $products;
 
@@ -79,7 +84,7 @@ class CashierTable extends Component
         }
 
         foreach ($this->items as $item) {
-            $cashier = Cashier::create([
+            $cashier = Transaction::create([
                 'code' => 'TRX-' . now()->timestamp, // Kode transaksi unik
                 'user_id' => Auth::id(),
                 'product_id' => $item['id'], // Mengambil ID produk dari item yang diiterasi
@@ -116,6 +121,80 @@ class CashierTable extends Component
         // Redirect ke halaman cetak
         return redirect()->route('cashier.print');
     }
+
+    public function ViaBank()
+    {
+        // Validasi jika keranjang kosong
+        if (empty($this->items)) {
+            toastr()->error('Keranjang tidak boleh kosong!');
+            return;
+        }
+
+        // Validasi pembayaran
+        if ($this->amount_paid < $this->subtotal) {
+            toastr()->error('Jumlah pembayaran tidak cukup!');
+            return;
+        }
+
+        // Validasi input bank dan nomor kartu
+        if (empty($this->bank) || empty($this->number_card)) {
+            toastr()->error('Nama bank dan nomor kartu harus diisi!');
+            return;
+        }
+
+        // Gunakan transaksi database untuk menghindari data korup
+        DB::beginTransaction();
+
+        try {
+            foreach ($this->items as $item) {
+                // Periksa stok produk
+                $product = Product::find($item['id']);
+                if (!$product || $product->stock < $item['stock']) {
+                    throw new \Exception('Stok tidak cukup untuk produk: ' . ($product->name ?? 'Tidak Diketahui'));
+                }
+
+                // Simpan data transaksi
+                $cashier = Transaction::create([
+                    'code' => 'TRX-' . now()->timestamp, // Kode transaksi unik
+                    'user_id' => Auth::id(),
+                    'product_id' => $item['id'], // ID produk dari item
+                    'date' => now(), // Tanggal transaksi
+                    'total_item' => $item['stock'], // Jumlah item per produk
+                    'subtotal' => $item['price_sell'] * $item['stock'], // Subtotal per item
+                    'amount_paid' => $this->amount_paid,
+                    'bank' => $this->bank,
+                    'number_card' => $this->number_card,
+                    'status' => 'completed',
+                ]);
+
+                // Update stok produk
+                $product->stock -= $item['stock'];
+                $product->save();
+            }
+
+            // Simpan detail transaksi dalam sesi untuk pencetakan
+            session(['transaction' => [
+                'items' => $this->items,
+                'subtotal' => $this->subtotal,
+                'amount_paid' => $this->amount_paid,
+                'change' => $this->amount_paid - $this->subtotal,
+            ]]);
+
+            toastr()->success('Transaksi Berhasil!');
+
+            // Reset form
+            $this->reset(['items', 'subtotal', 'amount_paid', 'bank', 'number_card']);
+
+            DB::commit();
+
+            // Redirect ke halaman cetak
+            return redirect()->route('cashier.print');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            toastr()->error('Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
 
 
     public function clear()

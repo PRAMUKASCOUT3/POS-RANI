@@ -1,5 +1,5 @@
 <div>
-    <div class="container mt-5">
+    <div class="container mt-4">
         <div class="card">
             <div class="card-body">
                 <!-- Pencarian Barang -->
@@ -18,34 +18,40 @@
 
                     <div class="col-md-6">
                         <div class="card border border-primary">
-                            <h5 class="card-header bg-primary text-white"><i class="fas fa-list"></i> Hasil Pencarian</h5>
+                            <h5 class="card-header bg-primary text-white"><i class="fas fa-list"></i> Hasil Pencarian
+                            </h5>
                             <div class="card-body" style="height: 350px; overflow-y: auto;">
                                 @if ($product->isNotEmpty())
                                     <ul class="list-group mt-3">
                                         @if ($product->isNotEmpty())
-                                        <ul class="list-group mt-3">
-                                            @foreach ($product as $item)
-                                                @if ($item->stock > 0) <!-- Cek apakah stok lebih dari 0 -->
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        <span>
-                                                            {{ $item->name }} - Rp. {{ number_format($item->price_sell, 0, ',', '.') }} | Stok: {{ $item->stock }}
-                                                        </span>
-                                                        <button class="btn btn-primary btn-sm" wire:click="addItem({{ $item->id }})">
-                                                            <i class="fas fa-plus"></i> Tambah
-                                                        </button>
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    
-                                        <!-- Pagination Links -->
-                                        <div class="mt-3">
-                                            {{ $product->links() }}
-                                        </div>
-                                    @else
-                                        <p class="mt-2">Tidak ada produk ditemukan.</p>
-                                    @endif
-                                    
+                                            <ul class="list-group mt-3">
+                                                @foreach ($product as $item)
+                                                    @if ($item->stock > 0)
+                                                        <!-- Cek apakah stok lebih dari 0 -->
+                                                        <li
+                                                            class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <span>
+                                                                {{ $item->name }} - Rp.
+                                                                {{ number_format($item->price_sell, 0, ',', '.') }} |
+                                                                Stok: {{ $item->stock }}
+                                                            </span>
+                                                            <button class="btn btn-primary btn-sm"
+                                                                wire:click="addItem({{ $item->id }})">
+                                                                <i class="fas fa-plus"></i> Tambah
+                                                            </button>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+
+                                            <!-- Pagination Links -->
+                                            <div class="mt-3">
+                                                {{ $product->links() }}
+                                            </div>
+                                        @else
+                                            <p class="mt-2">Tidak ada produk ditemukan.</p>
+                                        @endif
+
                                     </ul>
                                 @else
                                     <p class="mt-2">Tidak ada produk ditemukan.</p>
@@ -60,7 +66,8 @@
                     <div class="card-header bg-primary rounded">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="text-white">KASIR <i class="fas fa-cash-register"></i></h4>
-                            <button class="btn btn-danger" wire:click="clear"><i class="fas fa-sync-alt"></i> RESET KERANJANG</button>
+                            <button class="btn btn-danger" wire:click="clear"><i class="fas fa-sync-alt"></i> RESET
+                                KERANJANG</button>
                         </div>
                     </div>
                     <div class="card">
@@ -102,7 +109,7 @@
                                 </table>
 
                                 <!-- Informasi Total Belanja -->
-                                <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>
                                         <label for="totalSemua">Total Semua</label>
                                         <input id="totalSemua" value="Rp. {{ number_format($subtotal, 0, ',', '.') }}"
@@ -129,7 +136,12 @@
                                 <!-- Tombol Bayar dan Reset -->
                                 <input type="text" wire:model='user_id' hidden>
                                 <div class="mt-3 d-flex justify-content-end">
-                                    <button class="btn btn-success me-2" wire:click="saveTransaction">Bayar <i class="fas fa-vote-yea"></i></button>
+                                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
+                                        Via Bank <i class="fas fa-money-check"></i>
+                                    </button>
+                                    <button class="btn btn-success" wire:click="saveTransaction">Bayar <i
+                                            class="fas fa-vote-yea"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -138,5 +150,53 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white" id="exampleModalLabel">Pembayaran via Bank <i class="fas fa-money-check"></i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="bankName" class="form-label">Nama Bank <i class="fab fa-cc-mastercard"></i></label>
+                            <select wire:model="bank" id="bankName" class="form-control">
+                                <option value="">==Pilih Bank==</option>
+                                <option value="MANDIRI">MANDIRI</option>
+                                <option value="BCA">BCA</option>
+                                <option value="BRI">BRI</option>
+                                <option value="BNI">BNI</option>
+                                <option value="BANK 9">BANK 9</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bankAccount" class="form-label">Nomor Kartu Rekening <i class="far fa-credit-card"></i></label>
+                            <input type="number" wire:model="number_card" class="form-control" id="bankAccount" placeholder="Masukkan nomor rekening">
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="me-2">
+                                <label for="totalSemua">Total Semua</label>
+                                <input id="totalSemua" value="Rp. {{ number_format($subtotal, 0, ',', '.') }}" class="form-control" readonly>
+                            </div>
+                            <div>
+                                <label for="amountPaid">Bayar</label>
+                                <div class="d-flex align-items-center me-2">
+                                    <span class="input-group-text">Rp.</span>
+                                    <input type="number" wire:model.defer="amount_paid" class="form-control" id="amountPaid" min="0" placeholder="Masukkan jumlah pembayaran">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button class="btn btn-success" wire:click="ViaBank">Bayar <i class="fas fa-vote-yea"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
 </div>
