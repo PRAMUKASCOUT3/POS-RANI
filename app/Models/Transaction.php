@@ -15,19 +15,22 @@ class Transaction extends Model
     protected $fillable = [
         'code',
         'user_id',
+        'member_id',
         'product_id',
         'date',
         'total_item',
         'subtotal',
         'amount_paid',
-        'bank',
-        'number_card',
         'status'
     ];
 
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    public function member():BelongsTo
+    {
+        return $this->belongsTo(Members::class);
     }
 
     public function product(): BelongsTo

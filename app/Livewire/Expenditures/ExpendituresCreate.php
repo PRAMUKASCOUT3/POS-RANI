@@ -7,12 +7,18 @@ use Livewire\Component;
 
 class ExpendituresCreate extends Component
 {
-    public $date,$description,$nominal;
+    public $date, $description, $nominal;
     protected $rules = [
         'date' => 'required|date',
-        'description' =>'required|min:5',
-        'nominal' =>'required|numeric|min:1000'
+        'description' => 'required|min:5',
+        'nominal' => 'required|numeric|min:1000'
     ];
+
+    public function updatedNominal($value)
+    {
+        // Remove formatting (dots) before validation
+        $this->nominal = str_replace('.', '', $value);
+    }
 
     public function save()
     {

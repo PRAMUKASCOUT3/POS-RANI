@@ -78,6 +78,11 @@
                             <div data-i18n="Account">Data Pengguna</div>
                         </a>
                     </li>
+                    <li class="menu-item">
+                        <a href="{{ route('product.index') }}" class="menu-link">
+                            <div data-i18n="Connections">Data Produk</div>
+                        </a>
+                    </li>
                     {{-- <li class="menu-item">
                         <a href="{{ route('supplier.index') }}" class="menu-link">
                             <div data-i18n="Notifications">Data Supplier</div>
@@ -88,11 +93,7 @@
                             <div data-i18n="Connections">Data Kategori</div>
                         </a>
                     </li>
-                    <li class="menu-item">
-                        <a href="{{ route('product.index') }}" class="menu-link">
-                            <div data-i18n="Connections">Data Produk</div>
-                        </a>
-                    </li>
+                   
                 </ul>
             </li>
             <li class="menu-item">
@@ -119,6 +120,12 @@
                 </ul>
             </li>
         @else
+        <li class="menu-item">
+            <a href="{{ route('members.index') }}" class="menu-link">
+                <i class='menu-icon tf-icons bx bx-user-pin'></i>
+                <div data-i18n="Analytics">Member</div>
+            </a>
+        </li>
             <!-- User interface -->
             <li class="menu-item">
                 <a href="javascript:void(0)" class="menu-link menu-toggle">

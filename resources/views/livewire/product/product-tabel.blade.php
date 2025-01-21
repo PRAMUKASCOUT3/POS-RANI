@@ -15,7 +15,8 @@
                                 <th>Merk Produk <i class="fas fa-tag"></i></th>
                                 <th>Stok <i class="fas fa-cubes"></i></th>
                                 <th>Harga Beli <i class="fas fa-money-check-alt"></i></th>
-                                <th>Harga Jual <i class="fas fa-hand-holding-usd"></i></th>
+                                <th>Harga Total Jual <i class="fas fa-hand-holding-usd"></i></th>
+                                <th>Harga Perkilo <i class="fas fa-hand-holding-usd"></th>
                                 <th>Satuan <i class="fab fa-unity"></i></th>
                                 <th>Aksi <i class="fas fa-cogs"></i></th>
                             </tr>
@@ -37,6 +38,7 @@
                                     </td>
                                     <td>Rp.{{ number_format($item->price_buy) }}</td>
                                     <td>Rp.{{ number_format($item->price_sell) }}</td>
+                                    <td>Rp.{{ number_format($item->price_kg) }}</td>
                                     <td>{{ $item->unit }}</td>
                                     <td>
                                         <div class="d-flex align-items-between">

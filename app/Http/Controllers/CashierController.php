@@ -13,8 +13,16 @@ class CashierController extends Controller
     public function print()
     {
         $cashier = session('transaction');
+    
+        // Check if the session data exists
+        if (!$cashier || !isset($cashier['items'])) {
+            // Handle the case where session data is missing
+            return redirect()->route('cashier.index')->withErrors('No transaction data found.');
+        }
+    
         return view('cashier.print', compact('cashier'));
     }
+    
 
     public function history()
     {
@@ -96,4 +104,7 @@ class CashierController extends Controller
         // Download file PDF
         return $pdf->download('Laporan_Transaksi.pdf');
     }
+
+    
+
 }

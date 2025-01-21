@@ -18,10 +18,32 @@
             </div>
             <div class="mb-3">
                 <label>Nominal Pengeluaran <i class="fas fa-dollar-sign"></i></label>
-                <input type="number" class="form-control" wire:model="nominal" required>
+                <input 
+                type="text" 
+                class="form-control" 
+                oninput="formatRupiah(this)" 
+                onblur="removeRupiahFormat(this)" 
+                wire:model.lazy="nominal" 
+                required
+            >
                 @error('nominal') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             <button type="submit" class="btn btn-primary mt-2">Simpan</button>
         </form>
     </div>
+    <script>
+        // Format input to Rupiah format
+        function formatRupiah(input) {
+            let value = input.value.replace(/[^,\d]/g, ''); // Remove non-numeric characters
+            let formatted = new Intl.NumberFormat('id-ID', {
+                minimumFractionDigits: 0,
+            }).format(value.replace(/,/g, '')); // Add thousands separator
+            input.value = formatted;
+        }
+    
+        // Remove Rupiah format before submitting
+        function removeRupiahFormat(input) {
+            input.value = input.value.replace(/\./g, ''); // Remove dots
+        }
+    </script>
 </div>

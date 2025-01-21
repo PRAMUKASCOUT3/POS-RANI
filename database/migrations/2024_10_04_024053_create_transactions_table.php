@@ -11,27 +11,33 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Transactions', function (Blueprint $table) {
-            $table->id();
-            $table->string('code',15);
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->nullable(); //
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete(); //
-            $table->string('date',20);
-            $table->string('total_item',15);
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('amount_paid', 10, 2);
-            $table->string('bank',50)->nullable(); 
-            $table->string('number_card',30)->nullable(); 
-            $table->string('status',10);
-            $table->timestamps();
+        Schema::create('transactions', function (Blueprint $table) {
+            $table->id(); 
+            $table->string('code', 15); // Transaction code
+            $table->integer('user_id')->nullable(); // User ID
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete(); // Foreign key relation to users table
+            $table->integer('member_id')->nullable(); // User ID
+            $table->foreign('member_id')->references('id')->on('members')->cascadeOnDelete(); // Foreign key relation to users table
+            $table->integer('product_id'); // Product ID
+            $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete(); // Foreign key relation to products table
+            $table->string('date', 20); // Date of transaction
+            $table->string('total_item', 15); // Total items in transaction
+            $table->decimal('subtotal', 10, 2); // Subtotal value
+            $table->decimal('amount_paid', 15, 2); // Amount paid, default is 0
+            $table->string('bank',50)->nullable();
+            $table->string('number_card',30)->nullable();
+            $table->string('status', 10); // Transaction status (e.g. 'pending', 'compl
+    
+            $table->timestamps(); // Timestamps for created_at and updated_at
         });
     }
+    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('cashiers');
+        Schema::dropIfExists('transactions');
     }
 };

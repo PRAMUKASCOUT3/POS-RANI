@@ -12,17 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name',30);
-            $table->string('code',8);
-            $table->string('email',50)->unique()->nullable();
+            $table->integer('id')->autoIncrement();
+            $table->string('name', 30);
+            $table->string('code', 8);
+            $table->string('email', 50)->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password',60);
+            $table->string('password', 60);
             $table->boolean('isAdmin');
             $table->rememberToken();
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.

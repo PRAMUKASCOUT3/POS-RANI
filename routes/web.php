@@ -3,6 +3,7 @@
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExpenditureController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
+| routes are loaded by the RouteServiceProvmemberer and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
 */
@@ -47,6 +48,7 @@ Route::delete('/admin/produk/delete/{id}',[ProductController::class,'delete'])->
 
 
 
+
 });
 Auth::routes();
 
@@ -60,5 +62,14 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/admin/kasir/riwayat',[CashierController::class,'history'])->name('cashier.riwayat');
     Route::get('/admin/kasir/laporan',[CashierController::class,'report'])->name('cashier.report');
     Route::get('/admin/kasir/print-pdf',[CashierController::class,'generatePDF'])->name('cashier.pdf');
+
+    Route::get('/admin/member',[MemberController::class,'index'])->name('members.index');
+    Route::post('/admin/member/store',[MemberController::class,'store'])->name('members.store');
+    Route::get('/admin/member/{member}/edit',[MemberController::class,'edit'])->name('members.edit');
+    Route::put('/admin/member/{member}/update',[MemberController::class,'update'])->name('members.update');
+    Route::delete('/admin/member/{member}/delete',[MemberController::class,'delete'])->name('members.delete');
+
+
+
         
 });

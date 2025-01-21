@@ -8,7 +8,7 @@ use Livewire\Component;
 class ExpendituresEdit extends Component
 {
     public $expenditure_id;
-    public $date,$description,$nominal;
+    public $date, $description, $nominal;
 
     public function mount($expenditure)
     {
@@ -17,13 +17,18 @@ class ExpendituresEdit extends Component
         $this->description = $expenditure->description;
         $this->nominal = $expenditure->nominal;
     }
-    
+    public function updatedNominal($value)
+    {
+        // Remove formatting (dots) before validation
+        $this->nominal = str_replace('.', '', $value);
+    }
+
     public function update()
     {
         $validatedData = $this->validate([
             'date' => ['required', 'date'],
-            'description' => ['required','string','max:255'],
-            'nominal' => ['required', 'numeric','min:0'],
+            'description' => ['required', 'string', 'max:255'],
+            'nominal' => ['required', 'numeric', 'min:0'],
         ]);
 
         $expenditure = Expenditure::find($this->expenditure_id);
@@ -35,7 +40,7 @@ class ExpendituresEdit extends Component
 
     public function render()
     {
-        return view('livewire.expenditures.expenditures-edit',[
+        return view('livewire.expenditures.expenditures-edit', [
             'expenditure' => Expenditure::find($this->expenditure_id)
         ]);
     }

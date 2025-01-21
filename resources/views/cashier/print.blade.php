@@ -23,27 +23,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($cashier['items'] as $item)
-                            <tr>
-                                <td>{{ $item['name'] }}</td>
-                                <td>{{ $item['stock'] }}</td>
-                                <td>Rp. {{ number_format($item['price_sell'], 0, ',', '.') }}</td>
-                                <td>Rp. {{ number_format($item['price_sell'] * $item['stock'], 0, ',', '.') }}</td>
-                            </tr>
-                        @endforeach
+                        @if(!empty($cashier['items']) && is_array($cashier['items']))
+                            @foreach ($cashier['items'] as $item)
+                                <tr>
+                                    <td>{{ $item['name'] }}</td>
+                                    <td>KG {{ $item['stock'] }}</td>
+                                    <td>Rp. {{ number_format($item['price_kg'], 0, ',', '.') }}</td>
+                                    <td>Rp. {{ number_format($item['price_kg'] * $item['stock'], 0, ',', '.') }}</td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr><td colspan="4">No items in the transaction</td></tr>
+                        @endif
+                    
                         <tr>
                             <td colspan="3" class="text-right">Total</td>
-                            <td>Rp. {{ number_format($cashier['subtotal'], 0, ',', '.') }}</td>
+                            <td>Rp. {{ number_format($cashier['subtotal'] ?? 0, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right">Bayar</td>
-                            <td>Rp. {{ number_format($cashier['amount_paid'], 0, ',', '.') }}</td>
+                            <td>Rp. {{ number_format($cashier['amount_paid'] ?? 0, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right">Kembalian</td>
-                            <td>Rp. {{ number_format($cashier['change'], 0, ',', '.') }}</td>
+                            <td>Rp. {{ number_format($cashier['change'] ?? 0, 0, ',', '.') }}</td>
                         </tr>
                     </tbody>
+                    
                 </table>
         
                 <p class="text-center">Terima kasih telah berbelanja!</p>
