@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id(); 
+            $table->integer('id')->autoIncrement(); // Ubah id menjadi integer
             $table->string('code', 15); // Transaction code
             $table->integer('user_id')->nullable(); // User ID
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete(); // Foreign key relation to users table

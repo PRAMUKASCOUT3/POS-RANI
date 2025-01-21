@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->integer('id')->autoIncrement(); // Ubah id menjadi integer
-            $table->string('name'); // Nama anggota
-            $table->string('code'); // Email anggota
-            $table->string('phone'); // Nomor telepon
+            $table->string('name',100); // Nama anggota
+            $table->string('code',10); // Email anggota
+            $table->string('phone',15); // Nomor telepon
             $table->integer('points')->default(0)->nullable(); // Poin awal
             $table->timestamps();
         });
