@@ -15,7 +15,7 @@
                             <th>Nama Produk <i class="fas fa-file-signature"></i></th>
                             <th>Merk Produk <i class="fas fa-tag"></i></th>
                             <th>Stok <i class="fas fa-cubes"></i></th>
-                            <th>Harga Beli <i class="fas fa-money-check-alt"></i></th>
+                            <th>Harga modal <i class="fas fa-money-check-alt"></i></th>
                             <th>Harga Jual <i class="fas fa-hand-holding-usd"></i></th>
                             <th>Satuan <i class="fab fa-unity"></i></th>
                         </tr>

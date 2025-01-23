@@ -89,7 +89,7 @@
                             <th>Nama Produk</th>
                             <th>Merk Produk</th>
                             <th>Stok</th>
-                            <th>Harga Beli</th>
+                            <th>Harga Modal</th>
                             <th>Harga Jual</th>
                             <th>Satuan</th>
                         </tr>

@@ -39,9 +39,10 @@
                 <!-- Transaction report table -->
                 <h5 class="card-title">Laporan Transaksi</h5>
                 <div class="table-responsive">
-                    <table id="example" class="table table-bordered">
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Nama Kasir <i class="fas fa-user"></i></th>
                                 <th>Kode Transaksi <i class="fas fa-code"></i></th>
                                 <th>Tanggal <i class="fas fa-calendar-alt"></i></th>
@@ -54,10 +55,12 @@
                         </thead>
                         <tbody>
                             @php
+                            $no = 0; 
                                 $groupedCashier = $cashier->groupBy('code');
                             @endphp
                             @foreach ($groupedCashier as $code => $items)
                                 <tr>
+                                    <td rowspan="{{ $items->count() }}">{{ ++$no }}</td>
                                     <td rowspan="{{ $items->count() }}">{{ $items->first()->user->name }}</td>
                                     <td rowspan="{{ $items->count() }}">{{ $code }}</td>
                                     <td rowspan="{{ $items->count() }}">{{ $items->first()->date }}</td>
@@ -111,7 +114,45 @@
                         </tr>
                     </table>
                 </div>
+                <div class="flex items-center justify-between p-4 border-t border-blue-gray-50">
+                    <p class="block  text-sm antialiased font-normal leading-normal text-blue-gray-900">
+                        Page {{ $cashier->currentPage() }} of {{ $cashier->lastPage() }}
+                    </p>
+                    <div class="flex gap-2">
+                        @if ($cashier->onFirstPage())
+                            <button
+                                class="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle  text-xs font-bold uppercase text-gray-900 transition-all opacity-50 cursor-not-allowed"
+                                type="button" disabled>
+                                Previous
+                            </button>
+                        @else
+                            <a href="{{ $cashier->previousPageUrl() }}">
+                                <button
+                                    class="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle  text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85]"
+                                    type="button">
+                                    Previous
+                                </button>
+                            </a>
+                        @endif
+                        @if ($cashier->hasMorePages())
+                            <a href="{{ $cashier->nextPageUrl() }}">
+                                <button
+                                    class="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle  text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85]"
+                                    type="button">
+                                    Next
+                                </button>
+                            </a>
+                        @else
+                            <button
+                                class="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle  text-xs font-bold uppercase text-gray-900 transition-all opacity-50 cursor-not-allowed"
+                                type="button" disabled>
+                                Next
+                            </button>
+                        @endif
+                    </div>
+                </div>
             </div>
+
 
         </div>
     </div>

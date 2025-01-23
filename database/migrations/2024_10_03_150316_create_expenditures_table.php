@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('expenditures', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
-            $table->string('date',10);
+            $table->date('date');
             $table->string('description',100);
             $table->string('nominal',15);
             $table->timestamps();
