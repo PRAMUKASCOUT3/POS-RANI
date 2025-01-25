@@ -8,7 +8,7 @@
             </div>
             <div class="card-body">
                 @include('members.create')
-                <table class="table">
+                <table id="example" class="table">
                     <thead>
                         <th>No</th>
                         <th>Kode Member <i class="fas fa-id-badge"></i></th>

@@ -19,9 +19,23 @@ class ProductCreate extends Component
         'stock' => 'required|integer|min:1',
         'price_buy' => 'required|numeric|min:0',
         'price_sell' => 'required|numeric|min:0',
-        'weight' => 'required|numeric|min:1',
+        'weight' => 'nullable|numeric|min:1',
         'unit' => 'required|string',
     ];
+
+    protected function validationAttributes()
+    {
+        return [
+            'category_id' => 'kategori',
+            'name' => 'nama produk',
+            'brand' => 'merek',
+            'stock' => 'stok',
+            'price_buy' => 'harga beli',
+            'price_sell' => 'harga jual',
+            'weight' => 'berat',
+            'unit' => 'satuan',
+        ];
+    }
 
     public function mount()
     {
@@ -30,15 +44,46 @@ class ProductCreate extends Component
 
     public function updated($propertyName)
     {
-        // Jika harga jual atau berat diubah, hitung ulang harga per kilo
-        if (in_array($propertyName, ['price_sell', 'weight']) && $this->weight > 0) {
-            $this->price_kg = $this->price_sell / ($this->weight / 1000); // Berat dalam kg
+        if (in_array($propertyName, ['price_sell', 'weight'])) {
+            // Pastikan nilai price_sell dan weight dikonversi ke float
+            $priceSell = (float) $this->price_sell;
+            $weight = (float) $this->weight;
+
+            // Pastikan berat dalam kilogram
+            $weightInKg = $weight > 0 ? $weight / 100 : 0; // Jika berat dalam gram, konversikan ke kg
+
+            // Hitung harga per kilogram jika berat lebih dari nol
+            if ($weightInKg > 0) {
+                $this->price_kg = $priceSell / $weightInKg;
+            } else {
+                $this->price_kg = 0; // Set 0 jika berat tidak valid
+            }
         }
     }
 
+    public function updatedPriceBuy($value)
+    {
+        $this->price_buy = preg_replace('/[^0-9]/', '', $value);
+    }
+
+    public function updatedPriceSell($value)
+    {
+        $this->price_sell = preg_replace('/[^0-9]/', '', $value);
+    }
+
+
+
     public function save()
     {
+        // Tambahkan aturan validasi dinamis
+        $this->rules['weight'] = $this->unit === 'Kg'
+            ? 'required|numeric|min:1'
+            : 'nullable|numeric|min:0';
+
         $validatedData = $this->validate();
+
+        $weight = (float) $this->weight;
+        $weightInKg = $this->unit === 'Kg' && $weight > 0 ? $weight / 100 : 0;
 
         Product::create([
             'code' => $this->code,
@@ -48,8 +93,8 @@ class ProductCreate extends Component
             'stock' => $this->stock,
             'price_buy' => $this->price_buy,
             'price_sell' => $this->price_sell,
-            'price_kg' => $this->price_kg,
-            'weight' => $this->weight,
+            'price_kg' => $weightInKg > 0 ? $this->price_sell / $weightInKg : 0,
+            'weight' => $weightInKg, // Simpan berat dalam kg jika unit adalah Kg
             'unit' => $this->unit,
         ]);
 
@@ -62,9 +107,10 @@ class ProductCreate extends Component
         return redirect()->route('product.index');
     }
 
+
     public function render()
     {
-        return view('livewire.product.product-create',[
+        return view('livewire.product.product-create', [
             'category' => Category::all()
         ]);
     }

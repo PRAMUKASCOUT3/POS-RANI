@@ -16,7 +16,7 @@
                                 <th>Stok <i class="fas fa-cubes"></i></th>
                                 <th>Harga Modal <i class="fas fa-money-check-alt"></i></th>
                                 <th>Harga Total Jual <i class="fas fa-hand-holding-usd"></i></th>
-                                <th>Harga Perkilo <i class="fas fa-hand-holding-usd"></th>
+                                <th>Harga Perkilo / Pieces <i class="fas fa-hand-holding-usd"></th>
                                 <th>Satuan <i class="fab fa-unity"></i></th>
                                 <th>Aksi <i class="fas fa-cogs"></i></th>
                             </tr>

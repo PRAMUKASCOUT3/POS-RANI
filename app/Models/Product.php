@@ -27,7 +27,10 @@ class Product extends Model
     ];
 
 
-
+    public function hasSufficientStock($quantity)
+    {
+        return $this->stock >= $quantity;
+    }
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

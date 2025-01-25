@@ -70,11 +70,20 @@
                                                         <!-- Cek apakah stok lebih dari 0 -->
                                                         <li
                                                             class="list-group-item d-flex justify-content-between align-items-center">
-                                                            <span>
-                                                                {{ $item->name }} - Rp.
-                                                                {{ number_format($item->price_kg, 0, ',', '.') }} |
-                                                                Stok: {{ $item->stock }}
-                                                            </span>
+                                                            @if ($item->unit == 'Pcs')
+                                                                <span>
+                                                                    {{ $item->name }} - Rp.
+                                                                    {{ number_format($item->price_sell, 0, ',', '.') }}
+                                                                    |
+                                                                    Stok: {{ $item->stock }}
+                                                                </span>
+                                                            @else
+                                                                <span>
+                                                                    {{ $item->name }} - Rp.
+                                                                    {{ number_format($item->price_kg, 0, ',', '.') }} |
+                                                                    Stok: {{ $item->stock }}
+                                                                </span>
+                                                            @endif
                                                             <button class="btn btn-primary btn-sm"
                                                                 wire:click="addItem({{ $item->id }})">
                                                                 <i class="fas fa-plus"></i> Tambah
@@ -129,15 +138,26 @@
                                             <tr>
                                                 <td>{{ $item['name'] }}</td>
                                                 <td>
-                                                    <input type="number" min="1"
+                                                    <input type="number" min="0.1" step="0.1"
                                                         wire:model.defer="items.{{ $index }}.stock"
                                                         wire:change="updateQuantity({{ $index }}, $event.target.value)"
                                                         class="form-control">
                                                 </td>
-                                                <td>Rp. {{ number_format($item['price_kg'], 0, ',', '.') }}</td>
-                                                <td>Rp.
-                                                    {{ number_format($item['price_kg'] * $item['stock'], 0, ',', '.') }}
-                                                </td>
+                                                @if (isset($item['unit']) && $item['unit'] == 'Pcs')
+                                                    <td>Rp. {{ number_format($item['price_sell'] ?? 0, 0, ',', '.') }}
+                                                    </td>
+                                                    <td>Rp.
+                                                        {{ number_format(($item['price_sell'] ?? 0) * $item['stock'], 0, ',', '.') }}
+                                                    </td>
+                                                @else
+                                                    <td>Rp. {{ number_format($item['price_kg'] ?? 0, 0, ',', '.') }}
+                                                    </td>
+                                                    <td>Rp.
+                                                        {{ number_format(($item['price_kg'] ?? 0) * $item['stock'], 0, ',', '.') }}
+                                                    </td>
+                                                @endif
+
+
                                                 <td>
                                                     <button class="btn btn-danger btn-sm"
                                                         wire:click="removeItem({{ $index }})">

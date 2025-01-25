@@ -42,18 +42,25 @@ class CashierTable extends Component
 
     public function calculateSubtotal()
     {
+        // Hitung subtotal dengan harga yang sesuai (price_sell atau price_kg)
         $this->subtotal = array_reduce($this->items, function ($carry, $item) {
-            return $carry + ($item['price_kg'] * $item['stock']);
+            // Pilih harga sesuai unit (Pcs atau Kg)
+            $price = ($item['unit'] === 'Pcs') ? $item['price_sell'] : $item['price_kg'];
+
+            return $carry + ($price * $item['stock']); // stock dapat berupa pecahan
         }, 0);
 
-        $this->total_item = collect($this->items)->sum('stock');
+        // Hitung total item (stok) di keranjang
+        $this->total_item = collect($this->items)->sum('stock'); // Mendukung jumlah pecahan
     }
+
+
 
     public function addItem($productId)
     {
         $product = Product::find($productId);
 
-        if (!$product || $product->stock < 1) {
+        if (!$product->hasSufficientStock(0.1)) {
             toastr()->error('Stok tidak mencukupi!');
             return;
         }
@@ -61,18 +68,23 @@ class CashierTable extends Component
         $existingIndex = array_search($productId, array_column($this->items, 'id'));
 
         if ($existingIndex !== false) {
-            $this->items[$existingIndex]['stock']++;
+            $this->items[$existingIndex]['stock'] += 0.1; // Tambahkan 0.1 kg
         } else {
             $this->items[] = [
                 'id' => $product->id,
                 'name' => $product->name,
-                'price_kg' => $product->price_kg,
-                'stock' => 1,
+                'price_sell' => $product->price_sell,  // Pastikan price_sell di-set
+                'price_kg' => $product->price_kg,      // Pastikan price_kg di-set
+                'stock' => 0.1, // Mulai dengan 0.1 kg
+                'unit' => $product->unit,
             ];
         }
 
         $this->calculateSubtotal();
     }
+
+
+
 
     public function updateQuantity($index, $stock)
     {
@@ -106,6 +118,9 @@ class CashierTable extends Component
 
         // Proses transaksi untuk setiap item
         foreach ($this->items as $item) {
+            // Tentukan harga yang digunakan berdasarkan unit
+            $price = ($item['unit'] === 'Pcs') ? $item['price_sell'] : $item['price_kg'];
+
             // Buat transaksi
             $cashier = Transaction::create([
                 'code' => 'TRX-' . now()->timestamp, // Kode transaksi unik
@@ -113,7 +128,7 @@ class CashierTable extends Component
                 'product_id' => $item['id'], // Mengambil ID produk dari item yang diiterasi
                 'date' => now(), // Menggunakan waktu sekarang sebagai tanggal transaksi
                 'total_item' => $item['stock'], // Menyimpan jumlah item per produk
-                'subtotal' => $item['price_kg'] * $item['stock'], // Subtotal per item
+                'subtotal' => $price * $item['stock'], // Subtotal per item
                 'amount_paid' => $amountPaid,
                 'status' => 'completed',
             ]);
@@ -121,7 +136,7 @@ class CashierTable extends Component
             // Update stok produk
             $product = Product::find($item['id']);
             if ($product && $product->stock >= $item['stock']) {
-                $product->stock -= $item['stock'];
+                $product->stock -= $item['stock']; // Kurangi stok sesuai dengan jumlah item yang dibeli
                 $product->save();
             } else {
                 throw new \Exception('Stok tidak cukup untuk produk: ' . $product->name);
@@ -144,6 +159,7 @@ class CashierTable extends Component
         // Redirect ke halaman cetak
         return redirect()->route('cashier.print');
     }
+
 
 
     public function clear()
