@@ -75,13 +75,13 @@
                                                                     {{ $item->name }} - Rp.
                                                                     {{ number_format($item->price_sell, 0, ',', '.') }}
                                                                     |
-                                                                    Stok: {{ $item->stock }}
+                                                                    Stok: {{ $item->stock }} | {{ $item->unit }}
                                                                 </span>
                                                             @else
                                                                 <span>
                                                                     {{ $item->name }} - Rp.
                                                                     {{ number_format($item->price_kg, 0, ',', '.') }} |
-                                                                    Stok: {{ $item->stock }}
+                                                                    Stok: {{ $item->stock }} | {{ $item->unit }}
                                                                 </span>
                                                             @endif
                                                             <button class="btn btn-primary btn-sm"

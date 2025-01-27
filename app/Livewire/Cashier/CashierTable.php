@@ -73,10 +73,11 @@ class CashierTable extends Component
             $this->items[] = [
                 'id' => $product->id,
                 'name' => $product->name,
-                'price_sell' => $product->price_sell,  // Pastikan price_sell di-set
-                'price_kg' => $product->price_kg,      // Pastikan price_kg di-set
-                'stock' => 0.1, // Mulai dengan 0.1 kg
+                'price_sell' => $product->price_sell,
+                'price_kg' => $product->price_kg,
+                'stock' => 1, // Set jumlah default atau ambil dari input
                 'unit' => $product->unit,
+                'member_id' => $this->selected_member->id ?? null, // Pastikan member_id ditambahkan
             ];
         }
 
@@ -100,65 +101,103 @@ class CashierTable extends Component
     }
 
     public function saveTransaction()
-    {
-        // Validasi jika keranjang kosong
-        if (empty($this->items)) {
-            toastr()->error('Keranjang tidak boleh kosong!');
-            return;
-        }
-
-        // Pastikan amount_paid dihapus format Rupiah-nya dan diubah ke nilai numerik
-        $amountPaid = $this->removeRupiahFormat($this->amount_paid);
-
-        // Validasi pembayaran: Pastikan amountPaid lebih besar atau sama dengan subtotal
-        if ((float)$amountPaid < (float)$this->subtotal) {
-            toastr()->error('Jumlah pembayaran tidak cukup!');
-            return;
-        }
-
-        // Proses transaksi untuk setiap item
-        foreach ($this->items as $item) {
-            // Tentukan harga yang digunakan berdasarkan unit
-            $price = ($item['unit'] === 'Pcs') ? $item['price_sell'] : $item['price_kg'];
-
-            // Buat transaksi
-            $cashier = Transaction::create([
-                'code' => 'TRX-' . now()->timestamp, // Kode transaksi unik
-                'user_id' => Auth::id(),
-                'product_id' => $item['id'], // Mengambil ID produk dari item yang diiterasi
-                'date' => now(), // Menggunakan waktu sekarang sebagai tanggal transaksi
-                'total_item' => $item['stock'], // Menyimpan jumlah item per produk
-                'subtotal' => $price * $item['stock'], // Subtotal per item
-                'amount_paid' => $amountPaid,
-                'status' => 'completed',
-            ]);
-
-            // Update stok produk
-            $product = Product::find($item['id']);
-            if ($product && $product->stock >= $item['stock']) {
-                $product->stock -= $item['stock']; // Kurangi stok sesuai dengan jumlah item yang dibeli
-                $product->save();
-            } else {
-                throw new \Exception('Stok tidak cukup untuk produk: ' . $product->name);
-            }
-        }
-
-        // Menyimpan detail transaksi dalam sesi untuk pencetakan
-        session(['transaction' => [
-            'items' => $this->items,
-            'subtotal' => $this->subtotal,
-            'amount_paid' => $amountPaid,
-            'change' => $amountPaid - $this->subtotal,
-        ]]);
-
-        toastr()->success('Transaksi Berhasil!');
-
-        // Reset form
-        $this->reset(['items', 'subtotal', 'amount_paid']);
-
-        // Redirect ke halaman cetak
-        return redirect()->route('cashier.print');
+{
+    // Validasi jika keranjang kosong
+    if (empty($this->items)) {
+        toastr()->error('Keranjang tidak boleh kosong!');
+        return;
     }
+
+    // Ambil data member
+    $member = Members::find($this->member_id);
+    if (!$member) {
+        toastr()->error('Member tidak ditemukan!');
+        return;
+    }
+
+    // Hitung total poin yang digunakan
+    $pointsUsed = 0;
+    $pointsAdded = 0; // Variabel untuk menandakan apakah poin ditambahkan
+
+    if ($this->use_points && $member->points > 0) {
+        // Gunakan poin sebanyak subtotal atau sebanyak yang tersedia
+        $pointsUsed = min($this->subtotal, $member->points);
+
+        if ($pointsUsed > 0) {
+            // Kurangi poin yang digunakan
+            $member->points -= $pointsUsed;
+            $member->save();
+        }
+    }
+
+    // Potong subtotal dengan poin yang digunakan
+    $this->subtotal -= $pointsUsed;
+
+    // Periksa apakah poin sudah habis
+    if ($member->points == 0 && $pointsUsed > 0) {
+        toastr()->info('Poin Anda telah habis.');
+    }
+
+    // Proses transaksi
+    // Pastikan amountPaid dihapus format Rupiah-nya dan diubah ke nilai numerik
+    $amountPaid = $this->removeRupiahFormat($this->amount_paid);
+
+    // Validasi pembayaran: Pastikan amountPaid lebih besar atau sama dengan subtotal
+    if ((float)$amountPaid < (float)$this->subtotal) {
+        toastr()->error('Jumlah pembayaran tidak cukup!');
+        return;
+    }
+
+    // Proses transaksi untuk setiap item
+    foreach ($this->items as $item) {
+        // Tentukan harga yang digunakan berdasarkan unit
+        $price = ($item['unit'] === 'Pcs') ? $item['price_sell'] : $item['price_kg'];
+
+        // Buat transaksi
+        $cashier = Transaction::create([
+            'code' => 'TRX-' . now()->timestamp, // Kode transaksi unik
+            'user_id' => Auth::id(),
+            'member_id' => $item['member_id'],
+            'product_id' => $item['id'],
+            'date' => now(),
+            'total_item' => $item['stock'],
+            'subtotal' => $price * $item['stock'],
+            'amount_paid' => $amountPaid,
+            'status' => 'completed',
+        ]);
+
+        // Update stok produk
+        $product = Product::find($item['id']);
+        if ($product && $product->stock >= $item['stock']) {
+            $product->stock -= $item['stock'];
+            $product->save();
+        } else {
+            throw new \Exception('Stok tidak cukup untuk produk: ' . $product->name);
+        }
+    }
+
+    // Tambahkan poin hanya jika poin tidak digunakan
+    if ($pointsUsed == 0) {
+        $pointsAdded = 100; // Misalnya, 100 poin diberikan
+        $member->points += $pointsAdded;
+        $member->save();
+    }
+
+    // Menyimpan detail transaksi dalam sesi untuk pencetakan
+    session(['transaction' => [
+        'items' => $this->items,
+        'subtotal' => $this->subtotal,
+        'amount_paid' => $amountPaid,
+        'change' => $amountPaid - $this->subtotal,
+    ]]);
+
+    toastr()->success('Transaksi Berhasil!');
+    $this->reset(['items', 'subtotal', 'amount_paid']);
+    return redirect()->route('cashier.print');
+}
+
+    
+
 
 
 
@@ -192,8 +231,16 @@ class CashierTable extends Component
 
     public function selectMember($memberId)
     {
-        $this->selected_member = Members::find($memberId);
+        $member = Members::find($memberId);
+        if ($member) {
+            $this->selected_member = $member;
+            // Update member_id ke dalam form jika diperlukan
+            $this->member_id = $member->id;
+        } else {
+            session()->flash('error', 'Member tidak ditemukan!');
+        }
     }
+
 
     public function updatingSearchMember()
     {

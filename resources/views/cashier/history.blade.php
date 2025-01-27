@@ -27,7 +27,9 @@
                             <tr>
                                 <!-- Mengambil data dari transaksi pertama dalam grup -->
                                 <td rowspan="{{ $items->count() }}">{{ $code }}</td>
-                                <td rowspan="{{ $items->count() }}">{{ $items->first()->date }}</td>
+                                <td rowspan="{{ $items->count() }}">
+                                    {{ \Carbon\Carbon::parse($items->first()->date)->translatedFormat('d F Y H:i:s') }}
+                                </td>                                
                                 
                                 <!-- Menampilkan produk pertama di baris pertama -->
                                 <td>{{ $items->first()->product->name }}</td>
