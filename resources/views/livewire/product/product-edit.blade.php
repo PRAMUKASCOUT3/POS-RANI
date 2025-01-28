@@ -1,5 +1,5 @@
-<div>
-    <div class="container mt-4">
+<div class="container">
+    <div class="page-inner">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-header bg-primary text-white">Data Lama</h5>
@@ -32,11 +32,25 @@
                         @enderror
                     </div>
                     <div class="mt-3">
-                        <label for="stock">Stok <i class="fas fa-cubes"></i></label>
-                        <input type="number" class="form-control" wire:model="stock">
-                        @error('stock')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                        <div class="row">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="stock">Stok Lama <i class="fas fa-cubes"></i></label>
+                                    <input type="number" class="form-control" value="{{ $product->stock }}" readonly>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="stock">Tambah Stok Baru <i class="fas fa-cubes"></i></label>
+                                    <input type="number" class="form-control" wire:model.live="stock">
+                                    @error('stock')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="new_stock">Jumlah Stok Baru <i class="fas fa-cubes"></i></label>
+                                    <input type="number" class="form-control" value="{{ $new_stock }}" readonly>
+                                </div>
+                            </div>                                                    
+                        </div>
                     </div>
                     <div class="mt-3">
                         <label for="price_buy">Harga Beli <i class="fas fa-money-check-alt"></i></label>
