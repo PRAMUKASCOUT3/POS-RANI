@@ -74,14 +74,12 @@
                                                                 <span>
                                                                     {{ $item->name }} - Rp.
                                                                     {{ number_format($item->price_sell, 0, ',', '.') }}
-                                                                    |
-                                                                    Stok: {{ $item->stock }} | {{ $item->unit }}
+                                                                    | Stok: {{ $item->stock }} | {{ $item->unit }}
                                                                 </span>
                                                             @else
                                                                 <span>
                                                                     {{ $item->name }} - Rp.
-                                                                    {{ number_format($item->price_kg, 0, ',', '.') }} |
-                                                                    Stok: {{ $item->stock }} | {{ $item->unit }}
+                                                                    {{ number_format($item->price_kg, 0, ',', '.') }} | Stok: {{ $item->stock }} | {{ $item->unit }}
                                                                 </span>
                                                             @endif
                                                             <button class="btn btn-primary btn-sm"
@@ -251,7 +249,7 @@
                                     <div class="mb-3">
                                         <label for="bankName" class="form-label">Nama Bank <i
                                                 class="fab fa-cc-mastercard"></i></label>
-                                        <select wire:model="bank" id="bankName" class="form-control">
+                                        <select wire:model="bank" id="bankName" class="form-control" required>
                                             <option value="">==Pilih Bank==</option>
                                             <option value="MANDIRI">MANDIRI</option>
                                             <option value="BCA">BCA</option>
@@ -259,12 +257,18 @@
                                             <option value="BNI">BNI</option>
                                             <option value="BANK 9">BANK 9</option>
                                         </select>
+                                        @error('bank')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label for="bankAccount" class="form-label">Nomor Kartu Rekening <i
                                                 class="far fa-credit-card"></i></label>
                                         <input type="number" wire:model="number_card" class="form-control"
-                                            id="bankAccount" placeholder="Masukkan nomor rekening">
+                                            id="bankAccount" placeholder="Masukkan nomor rekening" required>
+                                            @error('number_card')
+                                                <span class="text-danger">{{ $messange }}</span>
+                                            @enderror
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                         <div class="me-2">
@@ -280,6 +284,9 @@
                                                 <input type="text" class="form-control"
                                                     oninput="formatRupiah(this)" onblur="removeRupiahFormat(this)"
                                                     wire:model.lazy="amount_paid" required>
+                                                    @error('amount_paid')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
