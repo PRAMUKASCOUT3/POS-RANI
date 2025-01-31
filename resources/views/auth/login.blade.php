@@ -1,123 +1,115 @@
 <!DOCTYPE html>
-<html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default"
-    data-assets-path="/assets/" data-template="vertical-menu-template-free">
+<html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>POS System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to  left, #ff5050 0%, #3399ff 100%);
+        }
 
-    <title>Login Basic</title>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
 
-    <meta name="description" content="" />
+        .img-header {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            width: 800px;
+        }
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
+        .col-md-6 {
+            padding: 20px;
+            /* Padding di kolom diperkecil */
+        }
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet" />
+        .form-control {
+            font-size: 14px;
+            /* Ukuran font input diperkecil */
+        }
 
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
+        .btn {
+            font-size: 14px;
+            /* Ukuran font tombol diperkecil */
+        }
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="/assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="/assets/css/demo.css" />
+        .img-fluid {
+            max-height: 300px;
+            /* Batas tinggi maksimum gambar POS */
+            width: auto;
+        }
 
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+        /* Media query untuk layar kecil */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%;
+                /* Container memenuhi lebar layar pada layar kecil */
+            }
 
-    <!-- Page CSS -->
-    <!-- Page -->
-    <link rel="stylesheet" href="/assets/vendor/css/pages/page-auth.css" />
-    <!-- Helpers -->
-    <script src="/assets/vendor/js/helpers.js"></script>
+            .col-md-6 {
+                padding: 10px;
+                /* Padding lebih kecil pada layar kecil */
+            }
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="/assets/js/config.js"></script>
+            .img-fluid {
+                max-height: 200px;
+                /* Batas tinggi gambar POS lebih kecil */
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Content -->
-
-    <div class="container-xxl">
-        <div class="authentication-wrapper authentication-basic container-p-y">
-            <div class="authentication-inner">
-                <!-- Register -->
-                <div class="card">
-                    <div class="card-body">
-                       
-                        <h4 class="mb-2 text-center">Selamat Datang! 👋</h4>
-                        <p class="mb-4 text-center">Masukan Email dan Paswword dengan Benar! 😉</p>
-
-                        <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" name="email"
-                                    class="form-control @error('email') is-invalid @enderror"
-                                    value="{{ old('email') }}" placeholder="Email" required autocomplete="email"
-                                    autofocus>
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 form-password-toggle">
-                                <div class="d-flex justify-content-between">
-                                    <label class="form-label" for="password">Password</label>
-                                </div>
-                                <div class="input-group input-group-merge">
-                                    <input type="password" name="password"
-                                        class="form-control @error('password') is-invalid @enderror" required
-                                        autocomplete="current-password" placeholder="Password">
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
+    <section class="ftco-section">
+        <div class="container" style="background-color: #ffffff">
+            <div class="row justify-content-center">
+                <div class="wrap">
+                    <div class="img-header" style="background-image: url(/assets/img/toko.jpeg);"></div>
+                    <div class="row">
+                        <div class="col-md-6 p-5">
+                            <span class="mb-4 text-center" style="font-family :'Garamond">Selamat Datang Di POS</span>
+                            <span class="mb-4 text-center" style="font-family :'Garamond">Toserba By Zulfff 🍪</span>
+                            <form class="signin-form" action="{{ route('login') }}" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    @error('email')
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="mb-3">
-                                <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
-                            </div>
-                        </form>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                    </div>
+                                    @error('password')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="/assets/img/pos.jpg" alt="POS" class="img-fluid">
+                        </div>
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
-    </div>
+    </section>
 
-
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="/assets/vendor/libs/popper/popper.js"></script>
-    <script src="/assets/vendor/js/bootstrap.js"></script>
-    <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
-    <script src="/assets/vendor/js/menu.js"></script>
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-
-    <!-- Main JS -->
-    <script src="/assets/js/main.js"></script>
-
-    <!-- Page JS -->
-
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/be87c3e44a.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

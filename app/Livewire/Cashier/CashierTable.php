@@ -190,8 +190,7 @@ class CashierTable extends Component
             'change' => $amountPaid - $this->subtotal,
         ]]);
 
-        toastr()->success('Transaksi Berhasil!');
-        $this->reset(['items', 'subtotal', 'amount_paid']);
+        $this->reset(['items', 'subtotal', 'amount_paid','use_points']);
         return redirect()->route('cashier.print');
     }
 
@@ -291,7 +290,6 @@ class CashierTable extends Component
             'change' => $amountPaid - $this->subtotal,
         ]]);
 
-        toastr()->success('Transaksi via bank berhasil disimpan! Menunggu konfirmasi.');
         $this->reset(['items', 'subtotal', 'amount_paid', 'bank','number_card','use_points']);
         return redirect()->route('cashier.print');
     }
