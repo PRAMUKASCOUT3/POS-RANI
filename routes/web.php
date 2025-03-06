@@ -31,6 +31,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/pengguna/Laporan',[UserController::class,'report'])->name('pengguna.laporan');
     Route::get('/admin/pengguna/print',[UserController::class,'generatePDF'])->name('pengguna.print');
     Route::delete('/admin/pengguna/delete/{id}',[UserController::class,'delete'])->name('pengguna.delete');
+    Route::get('/admin/profile/{id}',[UserController::class, 'show'])->name('pengguna.show');
+    Route::put('/admin/profile/update/{id}',[UserController::class, 'update'])->name('pengguna.update');
 
     Route::get('/admin/supplier', \App\Livewire\Supplier\index::class)->name('supplier.index');
     Route::get('/admin/supplier/{id}/edit',[SupplierController::class, 'edit'])->name('supplier.edit');
@@ -53,6 +55,8 @@ Route::delete('/admin/produk/delete/{id}',[ProductController::class,'delete'])->
 Auth::routes();
 
 Route::middleware(['auth'])->group(function(){
+    Route::get('/admin/profile/{id}',[UserController::class, 'show'])->name('pengguna.show');
+    Route::put('/admin/profile/update/{id}',[UserController::class, 'update'])->name('pengguna.update');
     Route::get('/',[UserController::class, 'index'])->name('dashboard');
     Route::get('/admin/pengeluaran',\App\Livewire\Expenditures\index::class)->name('expenditures.index');
     Route::get('/admin/pengeluaran/{id}/edit',[ExpenditureController::class,'edit'])->name('expenditures.edit');

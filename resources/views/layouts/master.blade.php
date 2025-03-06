@@ -91,10 +91,17 @@
                                             </div>
                                         </a>
                                     </li>
+                                    @php
+                                        $user = Auth::id();
+                                    @endphp
+                                    <li>
+                                        <a href="{{ route('pengguna.show', $user) }}" class="dropdown-item">Profile</a>
+                                    </li>
                                     <li>
                                         <form action="{{ route('logout') }}" method="post">
                                             @csrf
-                                            <button type="submit" class="dropdown-item">Logout <i class="fas fa-sign-out-alt"></i></button>
+                                            <button type="submit" class="dropdown-item">Logout <i
+                                                    class="fas fa-sign-out-alt"></i></button>
                                         </form>
                                     </li>
                                 </ul>
@@ -119,7 +126,7 @@
                             class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div class="mb-2 mb-md-0">
                                 © Skirpsi2025 ❤️
-                               
+
                             </div>
                         </div>
                     </footer>
@@ -173,26 +180,26 @@
         });
     </script>
 </body>
-    <script>
-        function confirmDelete(id) {
-            Swal.fire({
-                title: 'Apa Kamu Yakin ingin Menghapus Data?',
-                text: "Data akan terhapus permanen",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus!',
-                cancelButtonText: "Batal",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If the user clicks "Yes," submit the form
-                    document.getElementById('deleteForm' + id).submit();
-                    
-                }
-            });
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apa Kamu Yakin ingin Menghapus Data?',
+            text: "Data akan terhapus permanen",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Hapus!',
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If the user clicks "Yes," submit the form
+                document.getElementById('deleteForm' + id).submit();
+
+            }
+        });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </html>
